@@ -1,23 +1,22 @@
 import { getAllTasks } from './taskService';
 import { TaskTable } from './taskTable';
 import type { Task } from './types';
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 
 const App = () => {
-	const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
     getAllTasks().then(data => {
-      setTasks(data)
-    })
-  }, [])
+      setTasks(data);
+    });
+  }, []);
 
   return (
-		<div className="App">
-    	<h1>To do mājās</h1>
-			<TaskTable tasks={tasks}/>
-  	</div>
-	) 
-
-}
+    <div className="App">
+      <h1>To do mājās</h1>
+      <TaskTable tasks={tasks} />
+    </div>
+  );
+};
 export default App;
