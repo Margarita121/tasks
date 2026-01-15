@@ -1,8 +1,14 @@
+import { markTaskDone } from './taskService';
 import type { Task } from './types';
 
 type TaskTableProps = {
   tasks: Task[];
 };
+
+async function clickEvent(nr: string) {
+  await markTaskDone(nr);
+  window.location.reload();
+}
 
 export function TaskTable({ tasks }: TaskTableProps) {
   return (
@@ -24,6 +30,12 @@ export function TaskTable({ tasks }: TaskTableProps) {
             <td>{task.datums}</td>
             <td>{task.ik_pec_dienas}</td>
             <td>{task.to_do}</td>
+            <td>
+              <button id={task.nr} type="button" onClick={() => clickEvent(task.nr)}>
+                {' '}
+                Done{' '}
+              </button>
+            </td>
           </tr>
         ))}
       </tbody>
