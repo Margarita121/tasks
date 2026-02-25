@@ -2,7 +2,8 @@ import { FastifyPluginAsync } from 'fastify';
 import { google } from 'googleapis';
 import path from 'node:path';
 import fs from 'node:fs';
-import { normalizeHeader, formatDate, validCellID } from '../utils';
+import { normalizeHeader, formatDate, validCellID, renderTasksPage } from '../utils';
+import { Task } from '../types';
 
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID!;
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
@@ -20,7 +21,7 @@ const tasks: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     auth: jwt,
   });
 
-  fastify.get('/api/tasks', async function (request, reply) {
+  fastify.get('/tasks', async function (request, reply) {
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
       range: 'Darbi',
@@ -32,11 +33,13 @@ const tasks: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     const allTasks = rows.map(row =>
       Object.fromEntries(headers.map((h, i) => [h, row[i] ?? null])),
     );
-    const todoTasks = allTasks.filter(task => task.to_do === 'To do');
-    return todoTasks;
+    const todoTasks = allTasks.filter(task => task.to_do === 'To do') as Task[];
+    const html = renderTasksPage(todoTasks);
+
+    reply.header('Content-Type', 'text/html; charset=utf-8').send(html);
   });
 
-  fastify.post('/api/tasks', async function (request, reply) {
+  fastify.post('/tasks', async function (request, reply) {
     const { id } = request.body as {
       id: string;
     };
@@ -50,6 +53,7 @@ const tasks: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         },
       });
     }
+    reply.redirect('/tasks');
   });
 };
 

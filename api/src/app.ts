@@ -1,6 +1,8 @@
 import { join } from 'node:path';
 import AutoLoad, { AutoloadPluginOptions } from '@fastify/autoload';
 import { FastifyPluginAsync, FastifyServerOptions } from 'fastify';
+import cors from '@fastify/cors';
+import formbody from '@fastify/formbody';
 
 export interface AppOptions extends FastifyServerOptions, Partial<AutoloadPluginOptions> {}
 // Pass --options via CLI arguments in command to enable these options.
@@ -8,6 +10,8 @@ const options: AppOptions = {};
 
 const app: FastifyPluginAsync<AppOptions> = async (fastify, opts): Promise<void> => {
   // Place here your custom code!
+  fastify.register(cors);
+  fastify.register(formbody);
 
   // Do not touch the following lines
 
