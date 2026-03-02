@@ -5,7 +5,10 @@ import fs from 'node:fs';
 import { normalizeHeader, formatDate, validCellID, renderTasksPage } from '../utils';
 import { Task } from '../types';
 
-const SPREADSHEET_ID = process.env.SPREADSHEET_ID!;
+const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
+if (!SPREADSHEET_ID) {
+  throw new Error('SPREADSHEET_ID is not defined');
+}
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const CREDENTIALS_PATH = path.join(process.cwd(), 'service_account_key.json');
 
