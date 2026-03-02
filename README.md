@@ -9,8 +9,9 @@ Docker - packages app into container. Docker-compose file specifies the paramete
 To start the app in dev mode `npm run dev`\
 To run Docker container:
 - using Docker compose `docker compose up`
-- or run Docker container (service account key is specified as shared volume)
+- or build & run Docker container (service account key is specified as shared volume)
 ```
+docker build -t kindle-tasks .
 docker run -p 3000:3000 \
   --env-file .env \
   -v $(pwd)/service_account_key.json:/app/service_account_key.json \
