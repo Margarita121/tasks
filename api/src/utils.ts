@@ -70,6 +70,11 @@ export function renderTasksPage(tasks: Task[]): string {
     </tr>
     ${rows}
   </table>
+  <script>
+    setTimeout(function () {
+      window.location.href = "/tasks";
+    }, 86400000);
+  </script>
 </body>
 </html>
 `;
